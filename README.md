@@ -1,0 +1,2 @@
+# gocheck
+Go server check
