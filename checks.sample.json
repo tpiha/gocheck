@@ -2,7 +2,7 @@
     "check_some_content": {
         "type": "file_contains",
         "path": "/path/to/some/file", 
-        "content": "come content"
+        "content": "some content"
     }, 
     "check_if_some_file_exists": {
         "type": "file_exists",
