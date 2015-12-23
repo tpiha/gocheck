@@ -69,10 +69,14 @@ func (c *ChecksManager) ProcessChecks(server *Server) error {
 		chkParsed := check.(map[string]interface{})
 		command := c.buildCommand(chkParsed)
 
+		if verbose {
+			log.Printf("Built command for server '%s': %s", server.Host, command)
+		}
+
 		e = RunSSHCommand(server.User, server.Host, command)
 
 		if e != nil && err == nil {
-			err = fmt.Errorf("Check '%s' of type '%s' failed on server '%s'", checkName, chkParsed["type"], server.Host)
+			err = fmt.Errorf("FAILED: Check '%s' of type '%s' failed on server '%s'", checkName, chkParsed["type"], server.Host)
 		}
 	}
 
@@ -80,7 +84,6 @@ func (c *ChecksManager) ProcessChecks(server *Server) error {
 }
 
 func (c *ChecksManager) buildCommand(check map[string]interface{}) string {
-	// log.Printf("[ChecksManager.buildCommand] check_type: %s", check["type"])
 	var command string
 
 	for _, definition := range c.Definitions {
@@ -92,8 +95,6 @@ func (c *ChecksManager) buildCommand(check map[string]interface{}) string {
 			command = fmt.Sprintf(definition.Command, args...)
 		}
 	}
-
-	log.Printf("[ChecksManager.buildCommand] command: %s", command)
 
 	return command
 }

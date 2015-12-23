@@ -12,6 +12,7 @@ Usage of gocheck:
         Name of the checks JSON file (default "checks.json")
   -s string
         Name of the servers JSON file (default "servers.json")
+  -v    Show verbose output
 ```
 
 ## Adding check definitions

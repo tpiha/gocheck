@@ -7,6 +7,8 @@ import (
 	"sync"
 )
 
+var verbose bool
+
 // main function
 func main() {
 
@@ -15,6 +17,7 @@ func main() {
 	checksFile := flag.String("f", "checks.json", "Name of the checks JSON file")
 	definitionsFile := flag.String("d", "definitions.json", "Name of the checks definitions JSON file")
 	serversFile := flag.String("s", "servers.json", "Name of the servers JSON file")
+	flag.BoolVar(&verbose, "v", false, "Show verbose output")
 	flag.Parse()
 
 	// create checks manager and load checks file
@@ -26,7 +29,9 @@ func main() {
 	sf := ServersFile{}
 	sf.Load(*serversFile)
 
-	log.Printf("Number of servers: %s", strconv.Itoa(len(sf.Servers)))
+	if verbose {
+		log.Printf("Servers count: %s", strconv.Itoa(len(sf.Servers)))
+	}
 
 	// create and prepare wait sync group and semaphore
 	var wg sync.WaitGroup
@@ -39,7 +44,9 @@ func main() {
 		go func(i int, server *Server) {
 			defer wg.Done()
 			defer s.Unlock()
-			log.Printf("Checking server (#%s): %s", strconv.Itoa(i), server.Host)
+			if verbose {
+				log.Printf("Checking server (#%s): %s", strconv.Itoa(i), server.Host)
+			}
 			err := cm.ProcessChecks(server)
 			if err != nil {
 				log.Printf("%s", err)
