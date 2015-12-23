@@ -1,16 +1,16 @@
 {
-    "check_etc_hosts_has_8888": {
-        "path": "/home/synkee/test", 
-        "type": "file_contains", 
-        "check": "bla"
+    "check_some_content": {
+        "type": "file_contains",
+        "path": "/path/to/some/file", 
+        "content": "come content"
     }, 
-    "check_kite_config_file_exists": {
-        "path": "/home/synkee/testa", 
-        "type": "file_exists"
+    "check_if_some_file_exists": {
+        "type": "file_exists",
+        "path": "/path/to/some/file"
     }, 
-    "check_process_running": {
-        "name": "postgres", 
-        "type": "process_running"
+    "check_if_some_process_is_running": {
+        "type": "process_running",
+        "name": "someprocess"
     },
     "check_free_space": {
         "type": "free_space",

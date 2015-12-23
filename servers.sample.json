@@ -1,8 +1,16 @@
 {
     "servers": [
         {
-            "user": "test",
-            "host": "somehostname"
+            "user": "user1",
+            "host": "server1"
+        },
+        {
+            "user": "user2",
+            "host": "server2"
+        },
+        {
+            "user": "user3",
+            "host": "server3"
         }
     ]
 }
