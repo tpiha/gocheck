@@ -1,0 +1,8 @@
+TODO - v 1.0
+
+- unit tests
+- password and port options for servers.json file
+- reuse SSH session between checks on the same server
+- do only one check
+- do a single check with custom shell command
+- use custom SSH key for the SSH session
