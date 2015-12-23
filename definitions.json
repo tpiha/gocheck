@@ -13,5 +13,10 @@
         "name": "process_running",
         "command": "ps -A | grep %s",
         "args": ["process"]
+    },
+    {
+        "name": "free_space",
+        "command": "test $(df $PWD | awk '/[0-9]%%/{print $(NF-2)}') -gt %s",
+        "args": ["kilobytes"]
     }
 ]
