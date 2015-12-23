@@ -57,6 +57,10 @@ func (c *ChecksManager) ProcessChecks(server *Server) error {
 	return err
 }
 
+func (c *ChecksManager) buildCommand() string {
+
+}
+
 // fileContains checks if some file contains some string
 func (c *ChecksManager) fileContains(server *Server, path, content string) error {
 	command := fmt.Sprintf("grep %s %s", content, path)
@@ -66,7 +70,7 @@ func (c *ChecksManager) fileContains(server *Server, path, content string) error
 
 // fileExists checks if file exists on some path
 func (c *ChecksManager) fileExists(server *Server, path string) error {
-	command := fmt.Sprintf("ls -l %s", path)
+	command := fmt.Sprintf("ls %s", path)
 	err := RunSSHCommand(server.User, server.Host, command)
 	return err
 }
