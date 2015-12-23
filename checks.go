@@ -7,10 +7,12 @@ import (
 	"os"
 )
 
+// ChecksManager represents a manager object for servers checks
 type ChecksManager struct {
 	Checks map[string]interface{}
 }
 
+// Load loads the checks JSON file into the ChecksManager object and parses it
 func (c *ChecksManager) Load(checksFile string) error {
 	file, err := os.Open(checksFile)
 
@@ -30,6 +32,7 @@ func (c *ChecksManager) Load(checksFile string) error {
 	return nil
 }
 
+// ProcessChecks goes through checks and calls the appropriate methods to do the checks
 func (c *ChecksManager) ProcessChecks(server *Server) error {
 	var err error
 	var e error
@@ -54,18 +57,21 @@ func (c *ChecksManager) ProcessChecks(server *Server) error {
 	return err
 }
 
+// fileContains checks if some file contains some string
 func (c *ChecksManager) fileContains(server *Server, path, content string) error {
 	command := fmt.Sprintf("grep %s %s", content, path)
 	err := RunSSHCommand(server.User, server.Host, command)
 	return err
 }
 
+// fileExists checks if file exists on some path
 func (c *ChecksManager) fileExists(server *Server, path string) error {
 	command := fmt.Sprintf("ls -l %s", path)
 	err := RunSSHCommand(server.User, server.Host, command)
 	return err
 }
 
+// processRunning checks if some process is running on the server
 func (c *ChecksManager) processRunning(server *Server, process string) error {
 	command := fmt.Sprintf("ps -A | grep %s", process)
 	err := RunSSHCommand(server.User, server.Host, command)

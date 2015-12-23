@@ -12,6 +12,7 @@ import (
 	"golang.org/x/crypto/ssh/agent"
 )
 
+// SSHCommand represents SSH command object
 type SSHCommand struct {
 	Path   string
 	Env    []string
@@ -20,12 +21,14 @@ type SSHCommand struct {
 	Stderr io.Writer
 }
 
+// SSHClient represents SSH client object
 type SSHClient struct {
 	Config *ssh.ClientConfig
 	Host   string
 	Port   int
 }
 
+// RunCommand runs some SSH command on some SSHClient object
 func (client *SSHClient) RunCommand(cmd *SSHCommand) error {
 	var (
 		session *ssh.Session
@@ -45,6 +48,7 @@ func (client *SSHClient) RunCommand(cmd *SSHCommand) error {
 	return err
 }
 
+// prepareCommand prepares the SSHCommand object for the execution
 func (client *SSHClient) prepareCommand(session *ssh.Session, cmd *SSHCommand) error {
 	for _, env := range cmd.Env {
 		variable := strings.Split(env, "=")
@@ -84,6 +88,7 @@ func (client *SSHClient) prepareCommand(session *ssh.Session, cmd *SSHCommand) e
 	return nil
 }
 
+// newSession returns SSH session object
 func (client *SSHClient) newSession() (*ssh.Session, error) {
 	connection, err := ssh.Dial("tcp", fmt.Sprintf("%s:%d", client.Host, client.Port), client.Config)
 	if err != nil {
@@ -109,6 +114,7 @@ func (client *SSHClient) newSession() (*ssh.Session, error) {
 	return session, nil
 }
 
+// PublicKeyFile is used for setting SSH key as an authentication method
 func PublicKeyFile(file string) ssh.AuthMethod {
 	buffer, err := ioutil.ReadFile(file)
 	if err != nil {
@@ -122,6 +128,7 @@ func PublicKeyFile(file string) ssh.AuthMethod {
 	return ssh.PublicKeys(key)
 }
 
+// SSHAgent
 func SSHAgent() ssh.AuthMethod {
 	if sshAgent, err := net.Dial("unix", os.Getenv("SSH_AUTH_SOCK")); err == nil {
 		return ssh.PublicKeysCallback(agent.NewClient(sshAgent).Signers)
@@ -129,6 +136,7 @@ func SSHAgent() ssh.AuthMethod {
 	return nil
 }
 
+// RunSSHCommand runs some command on some host over SSH
 func RunSSHCommand(user, host, command string) error {
 	sshConfig := &ssh.ClientConfig{
 		User: user,
