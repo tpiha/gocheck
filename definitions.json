@@ -1,17 +1,17 @@
 [
     {
         "name": "file_contains",
-        "command": "grep {{ content }} {{ path }}",
+        "command": "grep %s %s",
         "args": ["content", "path"]
     },
     {
         "name": "file_exists",
-        "command": "ls {{ path }}",
+        "command": "ls %s",
         "args": ["path"]
     },
     {
         "name": "process_running",
-        "command": "ps -A | grep {{ process }}",
+        "command": "ps -A | grep %s",
         "args": ["process"]
     }
 ]

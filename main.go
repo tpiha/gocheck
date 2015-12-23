@@ -13,12 +13,14 @@ func main() {
 	// get command line options
 	concurrency := flag.Uint("c", 5, "Concurrency; how many parallel connections to make")
 	checksFile := flag.String("f", "checks.json", "Name of the checks JSON file")
+	definitionsFile := flag.String("d", "definitions.json", "Name of the checks definitions JSON file")
 	serversFile := flag.String("s", "servers.json", "Name of the servers JSON file")
 	flag.Parse()
 
 	// create checks manager and load checks file
 	cm := ChecksManager{}
 	cm.Load(*checksFile)
+	cm.LoadDefinitions(*definitionsFile)
 
 	// create servers file object and load the file
 	sf := ServersFile{}

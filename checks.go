@@ -7,9 +7,17 @@ import (
 	"os"
 )
 
+// CheckDefinition represents the JSON definition of the check
+type CheckDefinition struct {
+	Name    string   `json:"name"`
+	Command string   `json:"command"`
+	Args    []string `json:"args"`
+}
+
 // ChecksManager represents a manager object for servers checks
 type ChecksManager struct {
-	Checks map[string]interface{}
+	Checks      map[string]interface{}
+	Definitions []*CheckDefinition
 }
 
 // Load loads the checks JSON file into the ChecksManager object and parses it
@@ -32,6 +40,26 @@ func (c *ChecksManager) Load(checksFile string) error {
 	return nil
 }
 
+// Load loads the checks JSON file into the ChecksManager object and parses it
+func (c *ChecksManager) LoadDefinitions(definitionsFile string) error {
+	file, err := os.Open(definitionsFile)
+
+	if err != nil {
+		log.Printf("[Config.Load] Error while opening config file: %v", err)
+		return err
+	}
+
+	decoder := json.NewDecoder(file)
+	err = decoder.Decode(&c.Definitions)
+
+	if err != nil {
+		log.Printf("[Config.Load] Error while decoding JSON: %v", err)
+		return err
+	}
+
+	return nil
+}
+
 // ProcessChecks goes through checks and calls the appropriate methods to do the checks
 func (c *ChecksManager) ProcessChecks(server *Server) error {
 	var err error
@@ -39,16 +67,10 @@ func (c *ChecksManager) ProcessChecks(server *Server) error {
 
 	for checkName, check := range c.Checks {
 		chkParsed := check.(map[string]interface{})
-		switch chkParsed["type"] {
-		case "file_contains":
-			e = c.fileContains(server, chkParsed["path"].(string), chkParsed["check"].(string))
-		case "file_exists":
-			e = c.fileExists(server, chkParsed["path"].(string))
-		case "process_running":
-			e = c.processRunning(server, chkParsed["name"].(string))
-		default:
-			log.Printf("[CheckManager.ProcessChecks] Check not found: %s", chkParsed["type"])
-		}
+		command := c.buildCommand(chkParsed)
+
+		e = RunSSHCommand(server.User, server.Host, command)
+
 		if e != nil && err == nil {
 			err = fmt.Errorf("Check '%s' of type '%s' failed on server '%s'", checkName, chkParsed["type"], server.Host)
 		}
@@ -57,27 +79,21 @@ func (c *ChecksManager) ProcessChecks(server *Server) error {
 	return err
 }
 
-func (c *ChecksManager) buildCommand() string {
+func (c *ChecksManager) buildCommand(check map[string]interface{}) string {
+	// log.Printf("[ChecksManager.buildCommand] check_type: %s", check["type"])
+	var command string
 
-}
+	for _, definition := range c.Definitions {
+		if definition.Name == check["type"] {
+			var args []interface{}
+			for _, arg := range definition.Args {
+				args = append(args, check[arg])
+			}
+			command = fmt.Sprintf(definition.Command, args...)
+		}
+	}
 
-// fileContains checks if some file contains some string
-func (c *ChecksManager) fileContains(server *Server, path, content string) error {
-	command := fmt.Sprintf("grep %s %s", content, path)
-	err := RunSSHCommand(server.User, server.Host, command)
-	return err
-}
+	log.Printf("[ChecksManager.buildCommand] command: %s", command)
 
-// fileExists checks if file exists on some path
-func (c *ChecksManager) fileExists(server *Server, path string) error {
-	command := fmt.Sprintf("ls %s", path)
-	err := RunSSHCommand(server.User, server.Host, command)
-	return err
-}
-
-// processRunning checks if some process is running on the server
-func (c *ChecksManager) processRunning(server *Server, process string) error {
-	command := fmt.Sprintf("ps -A | grep %s", process)
-	err := RunSSHCommand(server.User, server.Host, command)
-	return err
+	return command
 }
