@@ -1,0 +1,15 @@
+{
+    "check_etc_hosts_has_8888": {
+        "path": "/home/synkee/test", 
+        "type": "file_contains", 
+        "check": "bla"
+    }, 
+    "check_kite_config_file_exists": {
+        "path": "/home/synkee/testa", 
+        "type": "file_exists"
+    }, 
+    "check_process_running": {
+        "name": "postgres", 
+        "type": "process_running"
+    }
+}
