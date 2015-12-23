@@ -10,7 +10,7 @@
     }, 
     "check_if_some_process_is_running": {
         "type": "process_running",
-        "name": "someprocess"
+        "process": "someprocess"
     },
     "check_free_space": {
         "type": "free_space",
