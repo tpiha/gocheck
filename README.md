@@ -19,8 +19,7 @@ Usage of gocheck:
 For example, if you want to make sure your servers root partitions have more than 1GB of free space, you would add this to the definitions.json file:
 
 
-```
-json
+```json
     {
         "name": "free_space",
         "command": "test $(df $PWD | awk '/[0-9]%%/{print $(NF-2)}') -gt %s",
@@ -30,8 +29,7 @@ json
 
 And then, to actually do the test on your servers, you create a check adding it in checks.json file like this:
 
-```
-json
+```json
     "check_free_space": {
         "type": "free_space",
         "kilobytes": "1000000"
