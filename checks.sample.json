@@ -11,5 +11,9 @@
     "check_process_running": {
         "name": "postgres", 
         "type": "process_running"
+    },
+    "check_free_space": {
+        "type": "free_space",
+        "kilobytes": "1000000"
     }
 }
