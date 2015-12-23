@@ -2,7 +2,7 @@ package main
 
 type Semaphore chan bool
 
-// Lock locks the semaphore until unlocked
+// Lock locks the semaphore until unlocked, passes until concurrecny is reached and then blocks
 func (s Semaphore) Lock() {
 	<-s
 }

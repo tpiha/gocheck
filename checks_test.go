@@ -2,6 +2,7 @@ package main
 
 import "testing"
 
+// TestChecksManager checks the CheckManager object loading and parsing capabilities for checks JSON file
 func TestChecksManager(t *testing.T) {
 	cm := ChecksManager{}
 	err := cm.Load("checks_test.json")
