@@ -22,3 +22,6 @@ _testmain.go
 *.exe
 *.test
 *.prof
+servers.json
+servers_large.json
+gocheck

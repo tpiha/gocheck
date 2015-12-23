@@ -1,0 +1,8 @@
+{
+    "servers": [
+        {
+            "user": "test",
+            "host": "somehostname"
+        }
+    ]
+}
