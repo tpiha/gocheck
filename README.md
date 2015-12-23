@@ -13,3 +13,16 @@ Usage of gocheck:
   -s string
         Name of the servers JSON file (default "servers.json")
 ```
+
+## Adding check definitions
+
+Open definitions.json file and add this for example:
+
+
+```
+    {
+        "name": "process_running",
+        "command": "ps -A | grep %s",
+        "args": ["process"]
+    }
+```
