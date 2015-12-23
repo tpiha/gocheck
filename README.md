@@ -19,7 +19,7 @@ Usage of gocheck:
 Open definitions.json file and add this for example:
 
 
-```
+```json
     {
         "name": "process_running",
         "command": "ps -A | grep %s",
