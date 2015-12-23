@@ -69,14 +69,6 @@ func (client *SSHClient) prepareCommand(session *ssh.Session, cmd *SSHCommand) e
 		go io.Copy(stdin, cmd.Stdin)
 	}
 
-	// if cmd.Stdout != nil {
-	// 	stdout, err := session.StdoutPipe()
-	// 	if err != nil {
-	// 		return fmt.Errorf("Unable to setup stdout for session: %v", err)
-	// 	}
-	// 	go io.Copy(cmd.Stdout, stdout)
-	// }
-
 	if cmd.Stderr != nil {
 		stderr, err := session.StderrPipe()
 		if err != nil {
