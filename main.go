@@ -2,6 +2,7 @@ package main
 
 import (
 	"flag"
+	"fmt"
 	"log"
 	"strconv"
 	"sync"
@@ -38,6 +39,8 @@ func main() {
 	wg.Add(len(sf.Servers))
 	s := NewSemaphore(*concurrency)
 
+	failed := false
+
 	// go through all the servers and do the checks
 	for i, server := range sf.Servers {
 		s.Lock()
@@ -50,10 +53,18 @@ func main() {
 			err := cm.ProcessChecks(server)
 			if err != nil {
 				log.Printf("%s", err)
+				failed = true
 			}
 		}(i, server)
 	}
 
 	// wait for all goroutines to finish
 	wg.Wait()
+
+	// Final message
+	if failed {
+		fmt.Printf("Some checkes have failed.\n")
+	} else {
+		fmt.Printf("All checks finished successfully.\n")
+	}
 }
