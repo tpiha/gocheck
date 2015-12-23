@@ -28,7 +28,7 @@ For example, if you want to make sure your servers root partitions have more tha
     }
 ```
 
-And then, to actually do the test on your servers, you create a check adding it in checks.json file like this:
+And then, to actually do the test on your servers, you need to create a check adding it in checks.json file like this:
 
 ```json
     "check_free_space": {
