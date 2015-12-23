@@ -1,6 +1,6 @@
-# Go servers checks
+# Go server cloud checks
 
-High performance servers checks written in Go. Gocheck is easily extensible through the JSON file.
+High performance server cloud checks written in Go. Gocheck is easily extensible through the JSON file.
 
 ```
 Usage of gocheck:
